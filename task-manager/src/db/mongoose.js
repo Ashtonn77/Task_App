@@ -23,6 +23,19 @@ const User = mongoose.model('User', {
             }
         }
     },
+    password:{
+        type: String,
+        required: true,
+        trim: true,
+        validate(value){
+            if(!validator.isLength(value,{min:7,max:undefined})){
+                throw new Error('Password cannot be less than seven characters')
+            }
+            else if(validator.contains(value.toLowerCase(), 'password')){
+                throw new Error('Your password cannot have the word password in it')
+            }
+        }
+    },
     age:{
         type: Number,
         default:0,
@@ -34,35 +47,41 @@ const User = mongoose.model('User', {
     }
 })
 
-
-const me = new User({
-   name: 'Ashton    ',
-   email: 'ASHTONRBAY@GMAIL.com   '
-})
-
-
-me.save().then(() => {
-    console.log(me)
-}).catch((error) => {
-    console.log(error.message)
-})
-
-// const Task = mongoose.model('Task', {
-//     description:{
-//         type: String
-//     },
-//     completed:{
-//         type: Boolean
-//     }
+//user
+// const me = new User({
+//    name: 'Ashton',
+//    email: 'ASHTONRBAY@GMAIL.com',
+//    age:32,
+//    password: 'ashton123'
 // })
 
-// const todo = new Task({
-//     description: 'Study more',
-//     completed: true
-// })
 
-// todo.save().then(() => {
-//     console.log(todo)
+// me.save().then(() => {
+//     console.log(me)
 // }).catch((error) => {
-//     console.log(error)
+//     console.log(error.message)
 // })
+
+//task
+const Task = mongoose.model('Task', {
+    description:{
+        type: String,
+        trim: true,
+        required: true
+    },
+    completed:{
+        type: Boolean,
+        default: false
+    }
+})
+
+const todo = new Task({
+    description: 'Study more',
+    completed: true
+})
+
+todo.save().then(() => {
+    console.log(todo)
+}).catch((error) => {
+    console.log(error)
+})
