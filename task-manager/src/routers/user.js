@@ -112,8 +112,15 @@ const upload = multer({
 });
 
 //add profile pic
-router.post("/users/me/avatar", upload.single("avatar"), async (req, res) => {
-  await res.send();
-});
+router.post(
+  "/users/me/avatar",
+  upload.single("avatar"),
+  async (req, res) => {
+    await res.send();
+  },
+  (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+  }
+);
 
 module.exports = router;
