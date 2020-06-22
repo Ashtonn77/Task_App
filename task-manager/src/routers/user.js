@@ -4,6 +4,7 @@ const router = new express.Router();
 const auth = require("../middleware/auth");
 const multer = require("multer");
 const sharp = require("sharp");
+const { sendWelcomeEmail } = require("../emails/accounts");
 const { route } = require("./task.js");
 
 //users
@@ -13,6 +14,7 @@ router.post("/users", async (req, res) => {
 
   try {
     await user.save();
+    sendWelcomeEmail(user.eventNames, user.email);
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
   } catch (e) {
